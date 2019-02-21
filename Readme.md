@@ -35,3 +35,21 @@ Doing this solution would have made this pretty trivial, but might be hard to ma
 Go regex isn't as straight forward as I'd like
 
 I also like how the core logic didn't change -- just the parsing logic changed, which helped my code.
+
+## Day 4
+
+A pretty interesting problem, but sort of hard to do. FOr the 2nd half, I really just wanted to use sql:
+`select letter from table order by count desc, letter asc`
+
+## Day 5
+
+So, Go's md5 implmenetation returns back a `[16]byte`, but Go's hex takes `[]byte`, which is super annoying
+But, there's an easy way to do this conversaion: use `rtn[:]` to turn it into a byte slick pretty easily
+
+## Day 9
+
+This one is a bit weird, and focuses on scanning and keeping track of where you are. This ended up not being as hard as I figured it would be. The big challenge for me here was making sure that I was keep track of which character I was in, while factoring what the next loop iteration was going to do. 
+Also, I need a way to keep that regex global, or relatively global so that I don't need to redefine it on every call.
+
+I hate the while syntax here. Seems pretty terrible, really. I suppose that's why most other languages opt for a while style and a for style? 
+Also, I'm pretty tired of using `:= range` for `for` loops. I don't really get why they opted to use `:=` instead of `in`, or alternatively why `range` is required. I nearly always write it without the range, then I need to go back and add it.
