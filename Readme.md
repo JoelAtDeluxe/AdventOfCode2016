@@ -53,3 +53,19 @@ Also, I need a way to keep that regex global, or relatively global so that I don
 
 I hate the while syntax here. Seems pretty terrible, really. I suppose that's why most other languages opt for a while style and a for style? 
 Also, I'm pretty tired of using `:= range` for `for` loops. I don't really get why they opted to use `:=` instead of `in`, or alternatively why `range` is required. I nearly always write it without the range, then I need to go back and add it.
+
+## Day 10
+
+This was a pain. I'm not super happy with my code, so I may make some revisions later on.
+
+The basic flow is this:
+  * Figure out eah of the relationships for each bot/output and their station positions
+  * Encode that logic somewhere (A struct here, with one reciever method -- a class would probably work better here)
+  * Find any bot that has 2 elements -- thankfully there's only one
+  * Execute the logic (recursively) until everything ends up in an output. 
+
+The big problem I faced here was actually with references. I wanted some shorthand variable to use over and over
+without using `*` and `&` (kind of a pain to type on this keyboard), but I ended up making copies without realizing it
+Soo, no luck there. I ended up going back and replacing all of the values with references, and then my code worked perfectly
+
+As a result though, there's a fair bit of debug code here that needs to be cleaned out.
