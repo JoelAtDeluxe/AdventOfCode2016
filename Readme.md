@@ -69,3 +69,18 @@ without using `*` and `&` (kind of a pain to type on this keyboard), but I ended
 Soo, no luck there. I ended up going back and replacing all of the values with references, and then my code worked perfectly
 
 As a result though, there's a fair bit of debug code here that needs to be cleaned out.
+
+## Day 11
+
+No clue what to do here.
+
+## Day 12
+
+I coded this up correctly on the first pass, but it seemed like it didn't work, since it was pretty slow
+
+I ended up doing two things to make this work faster:
+
+1. Cheat the number identification. I originally used a regular expression (not even a compiled one), but figured it would be faster to simply check to see that the first character looked like it could be a number, and not worry about if it was error prone. I didn't test, but this had a large impact on performance. it could probably be further optimized here as well
+2. Pre-pare out the steps. Initially I split the inputs on each pass, which ended up being needless.
+
+A 3rd improvement would be to memoize the relative results from a (or maybe each) cell, up until a jump. This one is more complicated, but could maybe save a number of iterations through the loop, and focus only on the parts that matter (namely, jumps)
