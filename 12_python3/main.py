@@ -1,3 +1,5 @@
+from time import time
+
 
 INC_REG = 1
 DEC_REG = 2
@@ -20,12 +22,11 @@ def main():
 
     compiled_instructions, mem_map, memory = compile_program(instructions)
 
-    # We can adjust the initial state here
-    breakpoint()
-
+    start = time()
     evaluate(compiled_instructions, memory)
-    print( f"Value in register a: {memory[mem_map.get('a')]}")
-    print("Done!")
+    duration = time() - start
+    print(f"Value in register a: {memory[mem_map.get('a')]}")
+    print(f"Finished in: {duration}!")
 
 
 def compile_program(program):
@@ -69,9 +70,28 @@ def compile_program(program):
 
 
 def evaluate(program, memory):
-    pc = 0
-    while pc < len(program):
-        pc = _eval_instruction(program[pc], memory, pc)
+    pc = 0    
+    prog_len = len(program)
+    while pc < prog_len:
+        # pc = _eval_instruction(program[pc], memory, pc)
+        npc = pc + 1  # This is the normal case -- only jump is different
+
+        cmd = program[pc][0]
+        param1 = program[pc][1]
+
+        if cmd == INC_REG:
+            memory[param1] += 1
+        elif cmd == DEC_REG:
+            memory[param1] -= 1
+        elif cmd == CPY_REG:
+            memory[ program[pc][2] ] = memory[param1]
+        elif cmd == CPY_VAL:
+            memory[ program[pc][2] ] = param1
+        elif cmd == JNZ_VAL and param1 != 0:
+            npc = pc + program[pc][2]
+        elif cmd == JNZ_REG and memory[param1] != 0:
+            npc = pc + program[pc][2]
+        pc = npc
 
 
 def _eval_instruction(inst, memory, pc):  # pc => program counter
