@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"./old"
 	"./tooling"
 )
 
 func main() {
-	old.Logic()
+	//old.Logic()
+	Logic()
 }
 
 func Logic() {
@@ -46,10 +46,9 @@ func compile(program []string) Engine {
 	}
 
 	getNextRegister := func(s string) int {
-		var rtn int
-		var ok bool
-		if rtn, ok = engine.MemMap[s]; !ok {
-			rtn := len(engine.Memory)
+		rtn, ok := engine.MemMap[s]
+		if !ok {
+			rtn = len(engine.Memory)
 			engine.MemMap[s] = rtn
 			engine.Memory = append(engine.Memory, 0)
 		}
@@ -107,7 +106,7 @@ func evaluate(eng *Engine) {
 		case DecReg:
 			eng.Memory[command[1]]--
 		case CpyReg:
-			eng.Memory[command[2]] = eng.Memory[1]
+			eng.Memory[command[2]] = eng.Memory[command[1]]
 		case CpyVal:
 			eng.Memory[command[2]] = command[1]
 		case JnzVal:
