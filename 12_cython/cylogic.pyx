@@ -1,9 +1,9 @@
-INC_REG = 1
-DEC_REG = 2
-CPY_REG = 3
-CPY_VAL = 4
-JNZ_REG = 5
-JNZ_VAL = 6
+cdef int INC_REG = 1
+cdef int DEC_REG = 2
+cdef int CPY_REG = 3
+cdef int CPY_VAL = 4
+cdef int JNZ_REG = 5
+cdef int JNZ_VAL = 6
 
 
 def compile_program(program):
