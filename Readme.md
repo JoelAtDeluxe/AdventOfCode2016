@@ -84,3 +84,12 @@ I ended up doing two things to make this work faster:
 2. Pre-pare out the steps. Initially I split the inputs on each pass, which ended up being needless.
 
 A 3rd improvement would be to memoize the relative results from a (or maybe each) cell, up until a jump. This one is more complicated, but could maybe save a number of iterations through the loop, and focus only on the parts that matter (namely, jumps)
+
+## Day 15
+
+I think there's a faster way to do this, possibly having to use the LCM of the discs. The idea of the quicker way is this:
+
+1. You've figured out how to drop it through n holes. You can repeat this by only choosing LCMs of the n discs, with each multiple being the number of positions in contains (in my example, the first 3 discs: `17 * 19 * 7`). 
+2. When you use multiples of the LCM, you are guarenteed to pass through the same n discs. 
+3. Each LCM is going to advance the next disc some number of values. You need to figure out what that next number is. Once you have that, you can advance the guess count until you find a match
+4. once you find that match, you should now be able to drop the capsule n+1 steps (the first n pass, because we always increment by lcms, the next, because the modulous finally works)
