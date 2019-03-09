@@ -93,3 +93,30 @@ I think there's a faster way to do this, possibly having to use the LCM of the d
 2. When you use multiples of the LCM, you are guarenteed to pass through the same n discs. 
 3. Each LCM is going to advance the next disc some number of values. You need to figure out what that next number is. Once you have that, you can advance the guess count until you find a match
 4. once you find that match, you should now be able to drop the capsule n+1 steps (the first n pass, because we always increment by lcms, the next, because the modulous finally works)
+
+
+## Day 18
+
+This one was actually pretty straight forward -- I appreciate the puzzlesa in which they give explicit rules on how to transform the data. 
+However, part 2 is kind of weird. Normally part 2 requires some kind of code change. Technically, this did require a code change -- a 40 to 400000
+but this isn't very significant. But, I guess what they were going for was maybe having some people run into problems with memory consumption? As a psuedo code solutino for that (actually just python), you can instead not build out the grid, and instead look at only two rows. the logic looks something like this:
+
+```python
+def calc_safe_squares(start_row, num_rows):
+  def calc_safe_in_row(row):
+    return sum([1 for c in s if c =='.'])
+
+  last_row = start_row
+  row_sum = 0
+  for i in range(num_rows-1):
+    row_sum += calc_safe_in_row(last_row)
+    last_row = build_row(last_row)  # same logic as before -- look at the previous row based off of the established rules
+  return row_sum
+```
+
+## Day 19
+
+I actually saw a youtube video on this: https://www.youtube.com/watch?v=uCsD3ZGzMgE
+Short version: we can wrtie the number as `2^n + l` (the biggest power of 2 less than the number, plus the remainder)
+If we do this, then the "winning" seat will be `2l + 1`
+Funny note: this video was published on Oct 28 2016, for the 2016 puzzle, so maybe a puzzle creator took inspiration from this?
