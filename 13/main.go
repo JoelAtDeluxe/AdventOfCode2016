@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -20,28 +21,39 @@ func main() {
 	logic()
 }
 
-func isAWall(x, y int) bool {
-	v := x*x + 3*x + 2*x*y + y + y*y
-	v = v + 1358 // favorite number
-	binary := strconv.FormatInt(int64(v), 2)
-	count := 0
-	for _, v := range binary {
-		if v == '1' {
-			count++
+func makeIsWall(favNum int) func(int, int) bool {
+	return func(x, y int) bool {
+		v := x*x + 3*x + 2*x*y + y + y*y
+		v = v + favNum // favorite number
+		binary := strconv.FormatInt(int64(v), 2)
+		count := 0
+		for _, v := range binary {
+			if v == '1' {
+				count++
+			}
 		}
+		return (count%2 == 1)
 	}
-	return (count%2 == 1)
 }
 
 func logic() {
-	grid := buildGrid(40, 49)
+	//test stuff
+	isWallFunc := makeIsWall(10)
+	grid := buildGrid(10, 7, isWallFunc)
 	player := Position{1, 1}
-	target := Position{31, 39}
-	// dijkstraTranverse(&grid, player, target)
-	printGrid(&grid, player, target)
+	target := Position{7, 4}
+
+	// real stuff
+	// isWallFunc := makeIsWall(1358)
+	// grid := buildGrid(40, 49)
+	// player := Position{1, 1}
+	// target := Position{31, 39}
+
+	dijkstraTranverse(&grid, player, target)
+	// printGrid(&grid, player, target)
 }
 
-func buildGrid(columns, rows int) [][]bool {
+func buildGrid(columns, rows int, isAWall func(int, int) bool) [][]bool {
 	grid := make([][]bool, rows)
 	for i := range grid {
 		grid[i] = make([]bool, columns)
@@ -56,17 +68,58 @@ func buildGrid(columns, rows int) [][]bool {
 }
 
 func printGrid(grid *[][]bool, startPos Position, targetPos Position) {
-	wall, open := "#", "."
+	rowHeader := func(max int) func() string {
+		i := 0
+		headerLength := len(strconv.Itoa(max))
+		return func() string {
+			header := make([]rune, headerLength)
+			num := strconv.Itoa(i)
+			for i := range num {
+				header[len(header)-1-i] = rune(num[len(num)-1-i])
+			}
+			rtn := fmt.Sprintf("%v ", string(header))
+			i++
+			return rtn
+		}
+	}(len(*grid))
+
+	colMax := len((*grid)[0])
+	printRowHeader(colMax)
+
 	for r, _ := range *grid {
+		fmt.Print(asColor(rowHeader(), Yellow))
 		for c, _ := range (*grid)[r] {
-			ch := open
+			ch := "."
 			if (*grid)[r][c] {
-				ch = wall
+				ch = "#"
+			} else if (startPos == Position{c, r}) {
+				ch = asColor("S", Green)
+			} else if (targetPos == Position{c, r}) {
+				ch = asColor("E", Red)
 			}
 			fmt.Print(ch)
 		}
 		fmt.Println()
 	}
+}
+
+func printRowHeader(numcols int) {
+	headerRows := len(strconv.Itoa(numcols))
+	for i := headerRows - 1; i >= 0; i-- {
+		b10 := int(math.Pow10(i))
+		line := make([]byte, numcols)
+		for j := 0; j < len(line); j++ {
+			something := (j / b10)
+			offset := something % 10
+			if offset == 0 && i != 0 && something == 0 {
+				line[j] = ' '
+			} else {
+				line[j] = byte('0' + offset)
+			}
+		}
+		fmt.Println(asColor(fmt.Sprintf("  %v", string(line)), Yellow))
+	}
+
 }
 
 func dijkstraTranverse(grid *[][]bool, startPos Position, targetPos Position) {
