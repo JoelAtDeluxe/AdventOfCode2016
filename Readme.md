@@ -120,3 +120,12 @@ I actually saw a youtube video on this: https://www.youtube.com/watch?v=uCsD3ZGz
 Short version: we can wrtie the number as `2^n + l` (the biggest power of 2 less than the number, plus the remainder)
 If we do this, then the "winning" seat will be `2l + 1`
 Funny note: this video was published on Oct 28 2016, for the 2016 puzzle, so maybe a puzzle creator took inspiration from this?
+
+Part 2 was a bit more difficult. I ended up having to implement a brute force solution, but that was going to take far too long to execute.
+I ended up looking at the numbers again and noticed the following pattern:
+for every n that can be evenly represted as 3^n, the winning seat is the last seat (i.e. `W(n) = n`)
+From there, solutions progress at slope = 1 for some period of time, before switching to slope=2. These switches occur
+on the "middle" multiple of 3, or expressed differently, at the midpoint between `3^n` and `3^(n-1)`. My math capabitiles have
+apparently deteriated to the point that I couldn't merge these into a single equation, nor am I sure that a single equation exists.
+So, in my solution, I instead just did a quick check based on where the midpoint is, relative to the encapsulating powers of 3, and checked
+which side was closer, and determined the result from there.
